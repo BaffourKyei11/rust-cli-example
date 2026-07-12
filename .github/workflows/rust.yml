@@ -14,17 +14,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
+      - name: Install Rust (with rustfmt)
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          override: true
+          components: rustfmt
 
-      - name: Build
-        run: cargo build --verbose
+      - name: Build (library + binary)
+        run: cargo build --lib --bins --verbose
 
-      - name: Run tests
-        run: cargo test --verbose
+      - name: Run tests (skip examples)
+        run: cargo test --lib --bins --verbose
 
- #     - name: Check formatting
- #      run: cargo fmt -- --check
+      - name: Check formatting (only the main package, skip examples)
+        run: cargo fmt --package blkrs -- --check
